@@ -1,0 +1,61 @@
+1、If语句中判断为 null!=id and id!=''，传入参数为0（Integer），不会进入该判断！！！！！！！！！！！！
+	因为：mybatis是用OGNL表达式来解析的，在OGNL的表达式中，’’会被解析成字符，java是强类型的，甚至char 和 一个string 会
+	导致不等，更何况Integer和String，所以if标签中的sql不会被解析。 
+	使用方法：单个的字符要写到双引号里面或者使用.toString()才行！
+		   id!=''只适用于字符串
+	
+	mapper中：
+		SELECT * FROM STUDENT 
+			<where>
+				<if test=" null!=id and id!=''">
+					AND ID=#{id} 
+				</if>
+				<if test=" null!=score and score!=''">
+					AND SCORE > #{score} 
+				</if>
+			</where>
+	
+	Test类中：
+	Map<String,Float> map=new HashMap<String,Float>();
+	//			map.put("id", 2f);
+	//			map.put("score",0f);//0等同于null
+	//			List<Student> stus=stuDAO.getStudentByConditionsWithWhere(map);
+				Student st=new Student(null,"草泥马",1,0);
+				List<Student> stus=stuDAO.getStudentByConditionsWithWhere(st);
+			
+	日志：
+	getStudentByConditionsWithWhere 159 ==>  Preparing: SELECT * FROM STUDENT 
+	getStudentByConditionsWithWhere 159 ==> Parameters: 
+
+2、SQL动态语句中判断可用直接调用传入对象的成员变量
+
+	Test类代码：
+	Student st=new Student(14,"草泥马",1,0);
+	List<Student> stus=stuDAO.getStudentByConditionsWithChoose(st);
+
+	错误例子：
+	<choose>
+					<when test="student.id==14">
+						AND ID=#{id} 
+					</when>
+					<when test=" null!=student.score and student.score!=''">
+						AND SCORE > #{score} 
+					</when>
+	org.apache.ibatis.exceptions.PersistenceException: 
+	### Error querying database.  Cause: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'student' in 'class Invi.mybatis_01.bean.Student'
+	### Cause: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'student' in 'class Invi.mybatis_01.bean.Student'
+
+	正确用法：
+			<where>
+				<choose>
+					<when test=" null!=score">
+						AND SCORE > #{score} 
+					</when>
+					<when test="id==14">
+						AND ID=#{id} 
+					</when>
+					<otherwise>
+						1>2
+					</otherwise>
+				</choose>
+			</where>

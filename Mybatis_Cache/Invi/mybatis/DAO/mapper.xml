@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Invi.mybatis.DAO.studentDAO">
+
+<!-- 先配置的缓存优先 -->
+	<cache/>    
+
+<!--
+	 <!-- 第三方二级缓存配置   
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+--> 
+
+
+<!-- 	设置增删改sql语句的fushcache为false只能影响二级缓存，不会影响一级缓存 -->
+	<insert id="saveStudentCache" parameterType="Student" >
+		INSERT INTO STUDENT (SID,NAME,AGE,SCORE,ClASSID) VALUES (#{id},#{name},#{age},#{score},#{classId})
+		<!--SELECT @@Identify-->
+	</insert> 
+		
+	<update id="deleteStudentForConditions" parameterType="Map">
+		DELETE FROM STUDENT WHERE ${condition}=#{value}
+	</update>
+	
+	<update id="updateStudent">
+		UPDATE STUDENT SET ID=#{id},NAME=#{name},AGE=#{age},SCORE=#{score} WHERE ID=#{id}
+	</update>
+	
+	<select id="getAllStudents" resultType="Student">
+		SELECT * FROM STUDENT
+	</select>
+	
+	<select id="getSingleStudent"  resultType="Student">
+		SELECT* FROM STUDENT WHERE SID=#{id}
+	</select>
+	
+	<select id="getSingleStudent2" resultType="Student">
+		SELECT* FROM STUDENT WHERE SID=#{id}
+	</select>
+	
+	<select id="getStudentByConditions" resultType="Student">
+		SELECT FROM STUDENT WHERE ID=#{id} AND SCORE=#{score}
+	</select>
+	
+	<select id="getForValueById" resultType="int">
+		SELECT (SCORE) FROM STUDENT WHERE ID=#{id}
+	</select>
+</mapper>

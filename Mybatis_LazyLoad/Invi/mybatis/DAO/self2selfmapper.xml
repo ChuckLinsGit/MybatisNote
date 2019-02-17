@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Invi.mybatis.DAO.Self2SelfDAO">
+	
+	<!-- 多对一自关联查询 -->
+	<resultMap type="ClassPosition4Self2Self" id="underlingquerry">
+		<id column="number" property="pid"/>
+		<result column="position" property="position"/>
+		<result column="name" property="name"/>
+		<result column="manager" property="manager"/>
+		<collection property="underling" ofType="ClassPosition4Self2Self"
+					select="getUnderlingPositionById"
+					column="number"/>
+	</resultMap>
+	
+	<select id="getUnderlingPositionById" resultMap="underlingquerry">
+		SELECT NUMBER,POSITION,NAME,MANAGER FROM CLASSPOSITION
+		WHERE MANAGER=#{number}
+	</select>
+	
+	<!-- 一对多自关联查询 -->
+	<resultMap type="ClassPosition4Self2Self" id="positionquerry">
+		<id column="number" property="pid"/>
+		<result column="position" property="position"/>
+		<result column="name" property="name"/>
+		<result column="manager" property="manager"/>
+		<collection property="underling" ofType="ClassPosition4Self2Self"
+					select="getUnderlingPositionById"
+					column="number"/>
+	</resultMap>
+	
+	<select id="getPositionSystemById" resultMap="positionquerry">
+		SELECT NUMBER,POSITION,NAME,MANAGER FROM CLASSPOSITION
+		WHERE NUMBER=#{number}
+	</select>
+	
+</mapper>

@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Invi.mybatis.DAO.studentDAO">
+
+	<insert id="saveStudentCache" parameterType="Student">
+		INSERT INTO STUDENT (ID,NAME,AGE,SCORE) VALUES (#{id},#{name},#{age},#{score})
+		<!--SELECT @@Identify-->
+	</insert> 
+		
+	<update id="deleteStudentForConditions" parameterType="Map">
+		DELETE FROM STUDENT WHERE ${condition}=#{value}
+	</update>
+	
+	<update id="updateStudent">
+		UPDATE STUDENT SET ID=#{id},NAME=#{name},AGE=#{age},SCORE=#{score} WHERE ID=#{id}
+	</update>
+	
+	<select id="getAllStudents" resultType="Student">
+		SELECT * FROM STUDENT
+	</select>
+	
+	<select id="getSingleStudent" resultType="Student">
+		SELECT FROM STUDENT WHERE ID=#{id}
+	</select>
+	
+	<select id="getStudentByConditions" resultType="Student">
+		SELECT FROM STUDENT WHERE ID=#{id} AND SCORE=#{score}
+	</select>
+	
+	<select id="getForValueById" resultType="int">
+		SELECT (SCORE) FROM STUDENT WHERE ID=#{id}
+	</select>
+</mapper>

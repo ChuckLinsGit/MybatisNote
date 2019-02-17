@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Invi.mybatis.DAO.One2GroupDAO">
+
+
+	<select id="getStudentInClassWithCollectionQuerry" parameterType="int" resultMap="classMapperInCollection">
+		SELECT * FROM SCHOOLCLASS,STUDENT
+		WHERE
+		CID=CLASSID AND CID=#{cid}
+	</select>
+	
+	
+	<!-- Select Student In Class With AssociationQuerry -->	
+	<resultMap type="SchoolClass4One2Group" id="classMapperInCollection">
+		<id column="cid" property="cid"/>
+		<result column="sumofstu" property="sumofstu"/>
+		<collection property="students" ofType="Student4One2Group">
+			<id column="sid" property="sid"/>
+			<result column="name" property="name"/>
+			<result column="score" property="score"/>
+			<result column="age" property="age"/>
+			<result column="classid" property="classid"/>
+		</collection>
+	</resultMap>
+	
+	
+	<select id="getStudentInClassWithCollectionSeperateQuerry" parameterType="int" resultMap="classMapperInCollectionSeperate">
+		SELECT * FROM SCHOOLCLASS   <!-- ,STUDENT不能再出现，否则会将Student全部查询出来 -->
+		WHERE
+		CID=#{cid}
+	</select>
+	
+	<!-- Select Student In Class With SeperateQuerry -->
+	<resultMap type="SchoolClass4One2Group" id="classMapperInCollectionSeperate">
+		<id column="cid" property="cid"/>
+		<result column="sumofstu" property="sumofstu"/>
+		<collection property="students" ofType="Student4One2Group"
+						select="getStudentInCollectionSeperateQuerry" 
+						column="cid"/>
+	</resultMap>
+	
+	<select id="getStudentInCollectionSeperateQuerry" resultType="Student4One2Group">
+		SELECT *FROM STUDENT
+		WHERE CLASSID=#{cid}
+	</select>
+	
+</mapper>
