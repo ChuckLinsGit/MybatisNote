@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	<configuration>
+	
+		<properties resource="jdbcForMysql.properties"/>
+	
+		<typeAliases>
+			<package name="Invi.mybatis.bean"/>			
+		</typeAliases>
+
+
+		
+		<environments default="development">
+			<environment id="development">
+				<transactionManager type="JDBC"/>
+				<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+				</dataSource>
+			</environment>
+		</environments>
+		
+		<mappers>
+			<!--在DAO包报名和mapper.xml文件名相同时可以直接使用package标签
+			 <package name="Invi/mybatis/DAO"/>
+			 -->
+			<mapper resource="Invi/mybatis/DAO/group2groupmapper.xml"/>
+			<mapper resource="Invi/mybatis/DAO/self2selfmapper.xml"/>
+			<mapper resource="Invi/mybatis/DAO/group2onemapper.xml"/>
+			<mapper resource="Invi/mybatis/DAO/one2groupmapper.xml"/>
+		</mappers>
+		
+
+	</configuration>

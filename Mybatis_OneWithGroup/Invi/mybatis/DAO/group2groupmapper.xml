@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="Invi.mybatis.DAO.Group2GroupDAO">
+		<resultMap type="SchoolClass4Group2Group" id="studentassociationquerry">
+			<id column="cid" property="cid"/>
+			<result column="sumofstu" property="sumofstu"/>
+			<collection property="student4Group2Group" ofType="Student4Group2Group">
+					<id column="sid" property="sid"/>
+					<result column="name" property="name"/>
+					<result column="age" property="age"/>
+					<result column="score" property="score"/>
+					<result column="classid" property="classid"/>
+			</collection>		
+		</resultMap>
+	
+		<select id="getStudentsInClassById" resultMap="studentassociationquerry">
+			SELECT CID,SUMOFSTU,SID,NAME,AGE,SCORE,CLASSID,STUID,CLAZZID
+			FROM SCHOOLCLASS,STUDENT,STUDENTSLINKEDCLASS
+			WHERE	SID=STUID AND CLAZZID=CID AND CID=#{cid} 
+		</select>
+	</mapper>
